@@ -34,6 +34,7 @@ class Ui_Form(object):
         spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.gridLayout.addItem(spacerItem, 4, 1, 1, 1)
         self.listWidget = QtWidgets.QListWidget(Form)
+        self.listWidget.setFocusPolicy(QtCore.Qt.StrongFocus)
         self.listWidget.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContentsOnFirstShow)
         self.listWidget.setObjectName("listWidget")
         self.gridLayout.addWidget(self.listWidget, 0, 0, 5, 1)
@@ -57,12 +58,19 @@ class Ui_Form(object):
         self.btn_new = QtWidgets.QPushButton(Form)
         self.btn_new.setMinimumSize(QtCore.QSize(100, 100))
         self.btn_new.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        self.btn_new.setFocusPolicy(QtCore.Qt.TabFocus)
         self.btn_new.setObjectName("btn_new")
         self.horizontalLayout.addWidget(self.btn_new)
         self.verticalLayout.addLayout(self.horizontalLayout)
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
+        Form.setTabOrder(self.btn_new, self.textedit)
+        Form.setTabOrder(self.textedit, self.btn_done)
+        Form.setTabOrder(self.btn_done, self.btn_block)
+        Form.setTabOrder(self.btn_block, self.btn_del)
+        Form.setTabOrder(self.btn_del, self.btn_update)
+        Form.setTabOrder(self.btn_update, self.listWidget)
 
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate

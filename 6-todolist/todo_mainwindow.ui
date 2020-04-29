@@ -76,6 +76,9 @@
      </item>
      <item row="0" column="0" rowspan="5">
       <widget class="QListWidget" name="listWidget">
+       <property name="focusPolicy">
+        <enum>Qt::StrongFocus</enum>
+       </property>
        <property name="sizeAdjustPolicy">
         <enum>QAbstractScrollArea::AdjustToContentsOnFirstShow</enum>
        </property>
@@ -135,6 +138,9 @@
          <height>16777215</height>
         </size>
        </property>
+       <property name="focusPolicy">
+        <enum>Qt::TabFocus</enum>
+       </property>
        <property name="text">
         <string>新建</string>
        </property>
@@ -144,6 +150,15 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>btn_new</tabstop>
+  <tabstop>textedit</tabstop>
+  <tabstop>btn_done</tabstop>
+  <tabstop>btn_block</tabstop>
+  <tabstop>btn_del</tabstop>
+  <tabstop>btn_update</tabstop>
+  <tabstop>listWidget</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

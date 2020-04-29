@@ -1,5 +1,6 @@
 import sys
 import os
+import time
 import logging
 import numpy as np
 import pandas as pd
@@ -131,6 +132,9 @@ class TodoWindow(QWidget, Ui_Form):
         self.data = TodoDataControl()
 
         self.setupUi(self)
+        self.btn_new.setFocus()
+        self.btn_new.setDefault(True)
+        self.btn_new.setShortcut("Alt + E")
         self.btn_new.clicked.connect(self.clicked_new)
         self.btn_update.clicked.connect(self.clicked_update)
 
@@ -186,7 +190,8 @@ class TodoWindow(QWidget, Ui_Form):
         logging.warning("This is a log!")
 
     def clicked_new(self):
-
+        self.data.insert(time.strftime("%Y-%m-%d", time.localtime()), time.strftime("%Y-%m-%d", time.localtime()),
+                         self.textedit.toPlainText(), "处理中")
         print("Push OK")
 
     def clicked_done(self):
