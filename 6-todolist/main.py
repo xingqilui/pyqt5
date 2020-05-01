@@ -134,9 +134,18 @@ class TodoWindow(QWidget, Ui_Form):
         self.setupUi(self)
         self.btn_new.setFocus()
         self.btn_new.setDefault(True)
-        self.btn_new.setShortcut("Alt + E")
+
         self.btn_new.clicked.connect(self.clicked_new)
         self.btn_update.clicked.connect(self.clicked_update)
+        self.btn_done.clicked.connect(self.clicked_done)
+        self.btn_del.clicked.connect(self.clicked_del)
+
+    def listitem_widget_create(self):
+        listitem_widget = QWidget()
+        listitem_layout = QGridLayout()
+        listitem_textedit = QTextEdit()
+        listitem_layout.addItem(listitem_textedit, 0, 0)
+        return listitem_widget
 
     def clicked_ok(self):
         print("Push OK")
@@ -192,9 +201,16 @@ class TodoWindow(QWidget, Ui_Form):
     def clicked_new(self):
         self.data.insert(time.strftime("%Y-%m-%d", time.localtime()), time.strftime("%Y-%m-%d", time.localtime()),
                          self.textedit.toPlainText(), "处理中")
-        print("Push OK")
+        self.textedit.setText("")
+
+        print("Push new")
 
     def clicked_done(self):
+        content = f"""
+                     <font face="华文琥珀", size="1">2020/05/01 - 2020/05/01  【01天】 --进行中--</font><br/>
+                     <font face="华文仿宋", size="4">我爱北京天安门！天安门上太阳升！</font>
+                  """
+        self.textedit.setText(content)
         pass
 
     def clicked_del(self):
@@ -209,6 +225,18 @@ class TodoWindow(QWidget, Ui_Form):
     # 当数据改变时，更新LIST_WIDGET试图
     def list_update(self):
         df = self.data.get_all()
+
+        listitem_widget = QWidget()
+        listitem_textedit = QTextEdit(listitem_widget)
+        listitem_layout = QGridLayout(listitem_widget)
+        listitem_layout.addItem(listitem_textedit, 0, 0)
+
+        content = f"""
+                     <font face="华文琥珀", size="1">{} - {}  【{}天】 --{}--</font><br/>
+                     <font face="华文仿宋", size="4">{}</font>
+                  """
+
+
         print(df)
 
     # 单击时，选中LIST的条目，获取条目的索引用，用来做其他事情
