@@ -129,12 +129,15 @@ class TodoWindow(QWidget, Ui_Form):
     def __init__(self):
         super(TodoWindow, self).__init__()
 
+        self.list = []
+        self.df = pd.DataFrame()
         self.data = TodoDataControl()
 
         self.setupUi(self)
         self.btn_new.setFocus()
         self.btn_new.setDefault(True)
 
+        # 创建信号和槽的连接
         self.btn_new.clicked.connect(self.clicked_new)
         self.btn_update.clicked.connect(self.clicked_update)
         self.btn_done.clicked.connect(self.clicked_done)
@@ -186,7 +189,7 @@ class TodoWindow(QWidget, Ui_Form):
         widget_listitem.setLayout(layout_listitem)
 
         item = QListWidgetItem()
-        item.setSizeHint(QSize(0, 100))
+        item.setSizeHint(QSize(0, 200))
         # item.setText("<h1>Hello</h1>")
         # item.setText(self.textEdit_2.toPlainText())
         self.listWidget.addItem(item)
@@ -202,19 +205,13 @@ class TodoWindow(QWidget, Ui_Form):
         self.data.insert(time.strftime("%Y-%m-%d", time.localtime()), time.strftime("%Y-%m-%d", time.localtime()),
                          self.textedit.toPlainText(), "处理中")
         self.textedit.setText("")
-
-        print("Push new")
+        self.list_update()
 
     def clicked_done(self):
-        content = f"""
-                     <font face="华文琥珀", size="1">2020/05/01 - 2020/05/01  【01天】 --进行中--</font><br/>
-                     <font face="华文仿宋", size="4">我爱北京天安门！天安门上太阳升！</font>
-                  """
-        self.textedit.setText(content)
         pass
 
     def clicked_del(self):
-        pass
+        self.listWidget.clear()
 
     def clicked_block(self):
         pass
@@ -224,20 +221,33 @@ class TodoWindow(QWidget, Ui_Form):
 
     # 当数据改变时，更新LIST_WIDGET试图
     def list_update(self):
-        df = self.data.get_all()
+        self.listWidget.clear()
 
-        listitem_widget = QWidget()
-        listitem_textedit = QTextEdit(listitem_widget)
-        listitem_layout = QGridLayout(listitem_widget)
-        listitem_layout.addItem(listitem_textedit, 0, 0)
+        self.df = self.data.get_all()
+        print(self.df)
 
-        content = f"""
-                     <font face="华文琥珀", size="1">{} - {}  【{}天】 --{}--</font><br/>
-                     <font face="华文仿宋", size="4">{}</font>
-                  """
+        for index, row in self.df.iterrows():
+            content = f"""
+                         <font face="黑体", size="3">{row['START_TIME']} - {row['END_TIME']}  【{''}天】 --{row['STATUS']}--</font><br/>
+                         <font face="华文仿宋", size="4">{row['CONTENT']}</font><br/>
+                         <hr>
+                      """
+            listitem = QListWidgetItem()
+            listitem.setSizeHint(QSize(0, 100))
 
+            listitem_widget = QWidget()
+            listitem_label = QLabel()
+            listitem_label.setText(content)
+            listitem_label.setWordWrap(True)
+            listitem_label.setAlignment((Qt.AlignLeading | Qt.AlignLeft | Qt.AlignTop))
 
-        print(df)
+            listitem_layout = QGridLayout()
+            listitem_layout.addWidget(listitem_label)
+            listitem_widget.setLayout(listitem_layout)
+
+            # self.listWidget.addItem(listitem) # 列表尾部插入
+            self.listWidget.insertItem(0, listitem) # 在列表任意位置插入
+            self.listWidget.setItemWidget(listitem, listitem_widget)
 
     # 单击时，选中LIST的条目，获取条目的索引用，用来做其他事情
     def list_single_clicked(self):
